@@ -170,7 +170,7 @@ class Dashboard extends StatelessWidget {
                     //   child: Center(child: x.buildTextWithIcon()),
                     // ),
                     Spacer(),
-                    MySlider(socketConnection: x.socketConnection)
+                    MySlider()
                   ],
                 ),
               )),
