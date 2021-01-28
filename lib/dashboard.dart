@@ -13,16 +13,15 @@ class Dashboard extends StatelessWidget {
         init: SliderController(),
         builder: (x) => Scaffold(
               appBar: AppBar(
-                centerTitle: true,
-                title: Text("Omid Slider Controller"),
-                backgroundColor: Colors.redAccent.shade200,
-                actions: [
-                  IconButton(
-                      icon: Icon(Icons.settings, color: Colors.white),
-                      onPressed: () {})
-                ],
-                leading: Icon(Icons.wifi)
-              ),
+                  centerTitle: true,
+                  title: Text("Omid Slider Controller"),
+                  backgroundColor: Colors.redAccent.shade200,
+                  actions: [
+                    IconButton(
+                        icon: Icon(Icons.settings, color: Colors.white),
+                        onPressed: () {})
+                  ],
+                  leading: Icon(Icons.wifi)),
               body: Center(
                   child: Container(
                 padding: EdgeInsets.all(20),
@@ -35,7 +34,6 @@ class Dashboard extends StatelessWidget {
                   ),
                 ),
                 child: ListView(
-                  
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
