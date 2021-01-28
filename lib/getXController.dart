@@ -1,30 +1,103 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:get/get.dart';
-import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcp_socket_connection/tcp_socket_connection.dart';
 
 class SliderController extends GetxController {
-  TcpSocketConnection socketConnection =
-      TcpSocketConnection("192.168.43.91", 51617);
-
-  @override
-  void onInit() {
-   // startConnection();
-    super.onInit();
-  }
+  final settings = <String>[].obs;
+  final deviceIp = '0.0.0.0'.obs;
+  final deviceport = '3040'.obs;
+  final movieCommand = 'mode1'.obs;
+  final timeLapseCommand = 'mode2'.obs;
+  final stopMotionCommand = 'mode3'.obs;
 
   final TextEditingController ipAddress = TextEditingController();
-  String result = " noting ";
+  final TextEditingController port = TextEditingController();
+  final TextEditingController moviec = TextEditingController();
+  final TextEditingController timel = TextEditingController();
+  final TextEditingController stopm = TextEditingController();
+
+  final sliderSpeed = 0.0.obs;
+  final sliderDirection = false.obs;
   final movieBtnValue = false.obs;
   final timeLapsBtnValue = false.obs;
   final stopMotionBtnValue = false.obs;
-  ButtonState stateTextWithIcon = ButtonState.idle;
+  final shoterCount = '0000'.obs;
+  final intervalTime = '00:00'.obs;
+  final projectStatus = false.obs;
+  final TextEditingController shoterCounter = TextEditingController();
+  final MaskedTextController intervalCounter =
+      MaskedTextController(mask: '00:00');
+
+  TcpSocketConnection socketConnection =
+      TcpSocketConnection("192.168.1.39", 50998);
+
+  @override
+  void onInit() {
+    startConnection();
+    loadSettingData();
+    shoterCounter.text = shoterCount();
+    intervalCounter.text = intervalTime();
+    super.onInit();
+  }
+
+  void loadSettingData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final myStringList = prefs.getStringList('setting') ?? [];
+
+    if (myStringList.isNotEmpty) {
+      deviceIp(myStringList[0]);
+      deviceport(myStringList[1]);
+      movieCommand(myStringList[2]);
+      timeLapseCommand(myStringList[3]);
+      stopMotionCommand(myStringList[4]);
+    }
+
+    ipAddress.text = deviceIp.value;
+    port.text = deviceport.value;
+    moviec.text = movieCommand.value;
+    timel.text = timeLapseCommand.value;
+    stopm.text = stopMotionCommand.value;
+    update();
+  }
+
+  Future changeSettingData() async {
+    settings([ipAddress.text, port.text, moviec.text, timel.text, stopm.text]);
+    print(settings);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('setting', settings());
+  }
+
+  void changeSliderDirection() {
+    sliderDirection.toggle();
+    update();
+  }
+
+  void changeSliderSpeed(speed) {
+    sliderSpeed(speed);
+    update();
+  }
+
+  changeShoterCounter() {
+    shoterCount(shoterCounter.text);
+    update();
+    Get.back();
+  }
+
+  changeIntervalTime() {
+    intervalTime(intervalCounter.text);
+    update();
+    Get.back();
+  }
+
+  void startStop() {
+    projectStatus.toggle();
+    update();
+  }
 
   void messageReceived(String msg) {
-    result = msg;
     print(msg);
 
     socketConnection.sendMessage("MessageIsReceived :D");
@@ -59,62 +132,14 @@ class SliderController extends GetxController {
   }
 
   void startConnection() async {
-   // await socketConnection.connect(120000, "%", messageReceived);
-    // await socketConnection.simpleConnect(12000, messageReceived);
-    print("Runnnn");
-    // socketConnection.sendMessage("Omiad Tala");
+    // await socketConnection.connect(120000, "%", messageReceived);
+    await socketConnection.simpleConnect(12000, messageReceived);
+    socketConnection.sendMessage("Omiad Tala");
   }
 
   void sendMess(String command) {
     socketConnection.sendMessage(command);
     // socketConnection.connectWithCommand(5000, "", command, messageReceived);
     print("Send Message");
-  }
-
-  Widget buildTextWithIcon() {
-    return ProgressButton.icon(iconedButtons: {
-      ButtonState.idle: IconedButton(
-          text: "START",
-          icon: Icon(Icons.power_settings_new, color: Colors.white),
-          color: Colors.deepPurple.shade500),
-      ButtonState.loading:
-          IconedButton(text: "Loading", color: Colors.deepPurple.shade700),
-      ButtonState.fail: IconedButton(
-          text: "FINISH",
-          icon: Icon(Icons.cancel, color: Colors.white),
-          color: Colors.red.shade300),
-      ButtonState.success: IconedButton(
-          text: "STOP",
-          icon: Icon(
-            Icons.stop,
-            color: Colors.white,
-          ),
-          color: Colors.green.shade400)
-    }, onPressed: onPressedIconWithText, state: stateTextWithIcon);
-  }
-
-  void onPressedIconWithText() {
-    switch (stateTextWithIcon) {
-      case ButtonState.idle:
-        stateTextWithIcon = ButtonState.loading;
-        Future.delayed(Duration(milliseconds: 300), () {
-          stateTextWithIcon = Random.secure().nextBool()
-              ? ButtonState.success
-              : ButtonState.fail;
-          update();
-        });
-
-        break;
-      case ButtonState.loading:
-        break;
-      case ButtonState.success:
-        stateTextWithIcon = ButtonState.idle;
-        break;
-      case ButtonState.fail:
-        stateTextWithIcon = ButtonState.idle;
-        break;
-    }
-    stateTextWithIcon = stateTextWithIcon;
-    update();
   }
 }
