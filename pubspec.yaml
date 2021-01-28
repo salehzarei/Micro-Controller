@@ -36,6 +36,7 @@ dependencies:
   xlive_switch: ^1.0.5
   progress_state_button: ^1.0.2
   get: ^3.24.0
+  shared_preferences: ^0.5.12+4
 
 dev_dependencies:
   flutter_test:
