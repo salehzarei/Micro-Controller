@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:omidsystem/getXController.dart';
 import 'package:omidsystem/settingPage.dart';
-import 'package:omidsystem/slider.dart';
-import 'package:progress_state_button/iconed_button.dart';
-import 'package:progress_state_button/progress_button.dart';
 import 'package:xlive_switch/xlive_switch.dart';
 
 class Dashboard extends StatelessWidget {
@@ -15,7 +12,7 @@ class Dashboard extends StatelessWidget {
         builder: (x) => Scaffold(
               appBar: AppBar(
                   centerTitle: true,
-                  title: Text("Omid Slider Controller"),
+                  title: Text("AVA Slider Controller"),
                   backgroundColor: Colors.redAccent.shade200,
                   actions: [
                     IconButton(
@@ -42,7 +39,7 @@ class Dashboard extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 XlivSwitch(
                                     value: x.movieBtnValue.value,
@@ -55,7 +52,7 @@ class Dashboard extends StatelessWidget {
                               ],
                             ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 XlivSwitch(
                                     value: x.timeLapsBtnValue.value,
@@ -68,7 +65,7 @@ class Dashboard extends StatelessWidget {
                               ],
                             ),
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 XlivSwitch(
                                     value: x.stopMotionBtnValue.value,
@@ -115,9 +112,7 @@ class Dashboard extends StatelessWidget {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 18)),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
+                                          Spacer(),
                                           TextField(
                                             onSubmitted: (v) =>
                                                 x.changeShoterCounter(),
@@ -183,25 +178,78 @@ class Dashboard extends StatelessWidget {
                                 height: 0.5,
                                 color: Colors.white,
                               ),
-                              Text("00:00",
-                                  style: TextStyle(
-                                      color: x.timeLapsBtnValue.value
-                                          ? Colors.white
-                                          : Colors.grey,
-                                      fontSize: 40)),
+                              InkWell(
+                                onTap: () => Get.dialog(Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: Get.width * 0.15,
+                                      vertical: Get.height * 0.37),
+                                  child: Material(
+                                    color: Colors.transparent,
+                                    child: Container(
+                                      padding: EdgeInsets.all(20),
+                                      decoration: BoxDecoration(
+                                          color: Colors.red.shade900,
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: Column(
+                                        children: [
+                                          Text("Select Interval Time",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18)),
+                                          Spacer(),
+                                          TextField(
+                                            onSubmitted: (v) =>
+                                                x.changeIntervalTime(),
+                                            controller: x.intervalCounter,
+                                            cursorColor: Colors.white,
+                                            textAlign: TextAlign.center,
+                                            maxLength: 5,
+                                            keyboardType: TextInputType.number,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 45),
+                                            decoration: InputDecoration(
+                                              counterText: '',
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              fillColor: Colors.white,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white54,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                              border: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: Colors.white,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )),
+                                child: Text(x.intervalTime(),
+                                    style: TextStyle(
+                                        color: x.timeLapsBtnValue.value
+                                            ? Colors.white
+                                            : Colors.grey,
+                                        fontSize: 40)),
+                              ),
                             ],
                           )
                         ],
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.white,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [],
                       ),
                     ),
                     Divider(
@@ -242,7 +290,82 @@ class Dashboard extends StatelessWidget {
                     Divider(
                       color: Colors.white,
                     ),
-                    MySlider()
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                "Slider Speed : ",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18.0),
+                              ),
+                              Text(
+                                x.sliderSpeed.round().toString(),
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 30.0),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            activeTrackColor: Colors.red[700],
+                            inactiveTrackColor: Colors.red[100],
+                            trackShape: RoundedRectSliderTrackShape(),
+                            trackHeight: 4.0,
+                            thumbShape:
+                                RoundSliderThumbShape(enabledThumbRadius: 12.0),
+                            thumbColor: Colors.redAccent,
+                            overlayColor: Colors.red.withAlpha(32),
+                            overlayShape:
+                                RoundSliderOverlayShape(overlayRadius: 28.0),
+                            tickMarkShape: RoundSliderTickMarkShape(),
+                            activeTickMarkColor: Colors.red[700],
+                            inactiveTickMarkColor: Colors.red[100],
+                            valueIndicatorShape:
+                                PaddleSliderValueIndicatorShape(),
+                            valueIndicatorColor: Colors.redAccent,
+                            valueIndicatorTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: Slider(
+                              min: 0,
+                              max: 14,
+                              divisions: 10,
+                              label: '${x.sliderSpeed().round()}',
+                              value: x.sliderSpeed(),
+                              onChanged: (value) => x.changeSliderSpeed(value)),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: RaisedButton(
+                        textColor: Colors.white,
+                        color: x.projectStatus.value
+                            ? Colors.red.shade900
+                            : Colors.green.shade900,
+                        child: x.projectStatus.value
+                            ? Text(
+                                "Stop",
+                                style: TextStyle(fontSize: 25),
+                              )
+                            : Text(
+                                "Start",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                        onPressed: () => x.startStop(),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               )),

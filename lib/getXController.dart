@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:get/get.dart';
-import 'package:numberpicker/numberpicker.dart';
-import 'package:progress_state_button/iconed_button.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcp_socket_connection/tcp_socket_connection.dart';
@@ -22,25 +19,27 @@ class SliderController extends GetxController {
   final TextEditingController timel = TextEditingController();
   final TextEditingController stopm = TextEditingController();
 
-  String result = " noting ";
-
   final sliderSpeed = 0.0.obs;
   final sliderDirection = false.obs;
   final movieBtnValue = false.obs;
   final timeLapsBtnValue = false.obs;
   final stopMotionBtnValue = false.obs;
   final shoterCount = '0000'.obs;
+  final intervalTime = '00:00'.obs;
+  final projectStatus = false.obs;
   final TextEditingController shoterCounter = TextEditingController();
-  ButtonState stateTextWithIcon = ButtonState.idle;
+  final MaskedTextController intervalCounter =
+      MaskedTextController(mask: '00:00');
 
   TcpSocketConnection socketConnection =
-      TcpSocketConnection("192.168.43.91", 51617);
+      TcpSocketConnection("192.168.1.39", 50998);
 
   @override
   void onInit() {
-    // startConnection();
+    startConnection();
     loadSettingData();
     shoterCounter.text = shoterCount();
+    intervalCounter.text = intervalTime();
     super.onInit();
   }
 
@@ -54,8 +53,6 @@ class SliderController extends GetxController {
       movieCommand(myStringList[2]);
       timeLapseCommand(myStringList[3]);
       stopMotionCommand(myStringList[4]);
-
-      print(deviceIp);
     }
 
     ipAddress.text = deviceIp.value;
@@ -89,8 +86,18 @@ class SliderController extends GetxController {
     Get.back();
   }
 
+  changeIntervalTime() {
+    intervalTime(intervalCounter.text);
+    update();
+    Get.back();
+  }
+
+  void startStop() {
+    projectStatus.toggle();
+    update();
+  }
+
   void messageReceived(String msg) {
-    result = msg;
     print(msg);
 
     socketConnection.sendMessage("MessageIsReceived :D");
@@ -126,9 +133,8 @@ class SliderController extends GetxController {
 
   void startConnection() async {
     // await socketConnection.connect(120000, "%", messageReceived);
-    // await socketConnection.simpleConnect(12000, messageReceived);
-    print("Runnnn");
-    // socketConnection.sendMessage("Omiad Tala");
+    await socketConnection.simpleConnect(12000, messageReceived);
+    socketConnection.sendMessage("Omiad Tala");
   }
 
   void sendMess(String command) {
