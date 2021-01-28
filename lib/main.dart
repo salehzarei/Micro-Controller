@@ -38,7 +38,7 @@ class _DashBoardState extends State<DashBoard> {
   bool _currentValue3 = false;
   ButtonState stateTextWithIcon = ButtonState.idle;
   TcpSocketConnection socketConnection =
-      TcpSocketConnection("192.168.4.1", 1010);
+      TcpSocketConnection("192.168.1.39", 56358);
 
   void messageReceived(String msg) {
     setState(() {
