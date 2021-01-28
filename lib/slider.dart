@@ -1,11 +1,10 @@
 import 'package:awesome_slider/awesome_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:tcp_socket_connection/tcp_socket_connection.dart';
 
 class MySlider extends StatefulWidget {
-  final TcpSocketConnection socketConnection;
+ 
 
-  const MySlider({Key key, this.socketConnection}) : super(key: key);
+
 
   @override
   _MySliderState createState() => _MySliderState();
@@ -13,12 +12,6 @@ class MySlider extends StatefulWidget {
 
 class _MySliderState extends State<MySlider> {
   double valueOnTextWidget = 0.0;
-
-  void sendMess(socketConnection) {
-    socketConnection.sendMessage("\$${valueOnTextWidget.round()}");
-    //socketConnection.connectWithCommand(5000, "", command, messageReceived);
-    print("Send Message ${valueOnTextWidget.round()}");
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,12 +75,7 @@ class _MySliderState extends State<MySlider> {
               ),
 
               onChanged: (double value) {
-                setState(() {
-                  valueOnTextWidget = value;
-                  print(value);
-                  Future.delayed(Duration(milliseconds: 500))
-                      .whenComplete(() => sendMess(widget.socketConnection));
-                });
+      
               },
             ),
           ),
