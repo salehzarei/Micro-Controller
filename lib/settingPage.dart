@@ -10,15 +10,15 @@ class SettingPage extends StatelessWidget {
         builder: (x) => Scaffold(
               appBar: AppBar(
                 centerTitle: true,
-                title: Text("Command Setting"),
-                backgroundColor: Colors.redAccent.shade200,
+                title: Text("Setting"),
+                backgroundColor: Colors.blueAccent.shade200,
               ),
               body: Center(
                   child: Container(
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.redAccent.shade200, Color(0xFF890808)],
+                    colors: [Colors.blueAccent.shade200, Colors.blue.shade900],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     stops: [0.0, 0.6],
@@ -265,7 +265,7 @@ class SettingPage extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                       child: RaisedButton(
                         textColor: Colors.white,
-                        color: Colors.black,
+                        color: Colors.blue.shade700,
                         child: Text("Save Setting"),
                         onPressed: () => x
                             .changeSettingData()

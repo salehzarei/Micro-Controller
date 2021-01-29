@@ -13,7 +13,7 @@ class Dashboard extends StatelessWidget {
               appBar: AppBar(
                   centerTitle: true,
                   title: Text("AVA Slider Controller"),
-                  backgroundColor: Colors.redAccent.shade200,
+                  backgroundColor: Colors.blueAccent.shade200,
                   actions: [
                     IconButton(
                         icon: Icon(Icons.settings, color: Colors.white),
@@ -25,7 +25,8 @@ class Dashboard extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.redAccent.shade200, Color(0xFF890808)],
+                    colors: [Colors.blueAccent.shade200, Colors.blue.shade900],
+                    //Color(0xFF890808)
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     stops: [0.0, 0.6],
@@ -87,6 +88,7 @@ class Dashboard extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Column(
                             children: [
@@ -94,7 +96,7 @@ class Dashboard extends StatelessWidget {
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 12)),
                               InkWell(
-                                onTap: () => Get.dialog(Padding(
+                                onTap: () => !x.movieBtnValue.value ? Get.dialog(Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: Get.width * 0.15,
                                       vertical: Get.height * 0.37),
@@ -154,7 +156,7 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                )),
+                                )) : null,
                                 child: Text(x.shoterCounter.text,
                                     style: TextStyle(
                                         color: x.movieBtnValue.value
@@ -164,22 +166,39 @@ class Dashboard extends StatelessWidget {
                               ),
                             ],
                           ),
+
+                          /// Shot
+                          MaterialButton(
+                            color: Colors.green,
+                            shape: CircleBorder(),
+                            onPressed: ()=>x.sendShoot(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: Icon(Icons.camera_alt ,color: Colors.white ,size: 35,)
+                              // Text(
+                              //   'Shoot',
+                              //   style: TextStyle(
+                              //       color: Colors.white, fontSize: 18),
+                              // ),
+                            ),
+                          ),
+
+                          /// interval btn
+
                           Column(
                             children: [
-                              Text("00:00",
+                             
+                              // Container(
+                              //   margin: EdgeInsets.all(5),
+                              //   width: 80,
+                              //   height: 0.5,
+                              //   color: Colors.white,
+                              // ),
+                              Text('Interval Time',
                                   style: TextStyle(
-                                      color: x.timeLapsBtnValue.value
-                                          ? Colors.yellow
-                                          : Colors.grey,
-                                      fontSize: 20)),
-                              Container(
-                                margin: EdgeInsets.all(5),
-                                width: 80,
-                                height: 0.5,
-                                color: Colors.white,
-                              ),
+                                      color: Colors.white, fontSize: 12)),
                               InkWell(
-                                onTap: () => Get.dialog(Padding(
+                                onTap: () => x.timeLapsBtnValue.value ? Get.dialog(Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: Get.width * 0.15,
                                       vertical: Get.height * 0.37),
@@ -239,7 +258,7 @@ class Dashboard extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                )),
+                                )) : null,
                                 child: Text(x.intervalTime(),
                                     style: TextStyle(
                                         color: x.timeLapsBtnValue.value
@@ -247,6 +266,12 @@ class Dashboard extends StatelessWidget {
                                             : Colors.grey,
                                         fontSize: 40)),
                               ),
+                               Text("00:00",
+                                  style: TextStyle(
+                                      color: x.timeLapsBtnValue.value
+                                          ? Colors.yellow
+                                          : Colors.grey,
+                                      fontSize: 20)),
                             ],
                           )
                         ],
@@ -271,8 +296,8 @@ class Dashboard extends StatelessWidget {
                           RaisedButton(
                             textColor: Colors.white,
                             color: Colors.red.shade900,
-                            child: Text("Change Slider Direction"),
-                            onPressed: () => x.changeSliderDirection(),
+                            child: Text("Slider Direction"),
+                            onPressed: () => x.sendDirection(),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.0),
                             ),
@@ -314,8 +339,8 @@ class Dashboard extends StatelessWidget {
                         ),
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
-                            activeTrackColor: Colors.red[700],
-                            inactiveTrackColor: Colors.red[100],
+                            activeTrackColor: Colors.blue[700],
+                            inactiveTrackColor: Colors.blue[100],
                             trackShape: RoundedRectSliderTrackShape(),
                             trackHeight: 4.0,
                             thumbShape:
@@ -350,7 +375,7 @@ class Dashboard extends StatelessWidget {
                         textColor: Colors.white,
                         color: x.projectStatus.value
                             ? Colors.red.shade900
-                            : Colors.green.shade900,
+                            : Colors.green.shade700,
                         child: x.projectStatus.value
                             ? Text(
                                 "Stop",
