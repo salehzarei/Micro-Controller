@@ -1,3 +1,4 @@
+import 'package:battery_indicator/battery_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:omidsystem/getXController.dart';
@@ -19,7 +20,18 @@ class Dashboard extends StatelessWidget {
                         icon: Icon(Icons.settings, color: Colors.white),
                         onPressed: () => Get.to(SettingPage()))
                   ],
-                  leading: Icon(Icons.wifi)),
+                  leading: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 15, horizontal: 8),
+                    child: BatteryIndicator(
+                      mainColor: Colors.white,
+                      batteryFromPhone: false,
+                      showPercentNum: false,
+                      colorful: false,
+                      batteryLevel: x.batteryLevel.value,
+                      style: BatteryIndicatorStyle.values[1],
+                    ),
+                  )),
               body: Center(
                   child: Container(
                 padding: EdgeInsets.all(20),
@@ -96,67 +108,76 @@ class Dashboard extends StatelessWidget {
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 12)),
                               InkWell(
-                                onTap: () => !x.movieBtnValue.value ? Get.dialog(Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Get.width * 0.15,
-                                      vertical: Get.height * 0.37),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                          color: Colors.red.shade900,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Column(
-                                        children: [
-                                          Text("Select the number of shots",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18)),
-                                          Spacer(),
-                                          TextField(
-                                            onSubmitted: (v) =>
-                                                x.changeShoterCounter(),
-                                            controller: x.shoterCounter,
-                                            cursorColor: Colors.white,
-                                            textAlign: TextAlign.center,
-                                            maxLength: 4,
-                                            keyboardType: TextInputType.number,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 45),
-                                            decoration: InputDecoration(
-                                              counterText: '',
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                ),
+                                onTap: () => x.timeLapsBtnValue.value
+                                    ? Get.dialog(Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: Get.width * 0.15,
+                                            vertical: Get.height * 0.37),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: Container(
+                                            padding: EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                                color: Colors.red.shade900,
                                                 borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              fillColor: Colors.white,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white54,
+                                                    BorderRadius.circular(15)),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                    "Select the number of shots",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18)),
+                                                Spacer(),
+                                                TextField(
+                                                  onSubmitted: (v) =>
+                                                      x.changeShoterCounter(),
+                                                  controller: x.shoterCounter,
+                                                  cursorColor: Colors.white,
+                                                  textAlign: TextAlign.center,
+                                                  maxLength: 4,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 45),
+                                                  decoration: InputDecoration(
+                                                    counterText: '',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    fillColor: Colors.white,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white54,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )) : null,
+                                        ),
+                                      ))
+                                    : null,
                                 child: Text(x.shoterCounter.text,
                                     style: TextStyle(
                                         color: x.movieBtnValue.value
@@ -169,25 +190,32 @@ class Dashboard extends StatelessWidget {
 
                           /// Shot
                           MaterialButton(
-                            color: Colors.green,
+                            color: x.stopMotionBtnValue.value
+                                ? Colors.green
+                                : Colors.grey,
                             shape: CircleBorder(),
-                            onPressed: ()=>x.sendShoot(),
+                            onPressed: () => x.stopMotionBtnValue.value
+                                ? x.sendShoot()
+                                : null,
                             child: Padding(
-                              padding: const EdgeInsets.all(15),
-                              child: Icon(Icons.camera_alt ,color: Colors.white ,size: 35,)
-                              // Text(
-                              //   'Shoot',
-                              //   style: TextStyle(
-                              //       color: Colors.white, fontSize: 18),
-                              // ),
-                            ),
+                                padding: const EdgeInsets.all(15),
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.white,
+                                  size: 35,
+                                )
+                                // Text(
+                                //   'Shoot',
+                                //   style: TextStyle(
+                                //       color: Colors.white, fontSize: 18),
+                                // ),
+                                ),
                           ),
 
                           /// interval btn
 
                           Column(
                             children: [
-                             
                               // Container(
                               //   margin: EdgeInsets.all(5),
                               //   width: 80,
@@ -198,67 +226,75 @@ class Dashboard extends StatelessWidget {
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 12)),
                               InkWell(
-                                onTap: () => x.timeLapsBtnValue.value ? Get.dialog(Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: Get.width * 0.15,
-                                      vertical: Get.height * 0.37),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: Container(
-                                      padding: EdgeInsets.all(20),
-                                      decoration: BoxDecoration(
-                                          color: Colors.red.shade900,
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      child: Column(
-                                        children: [
-                                          Text("Select Interval Time",
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 18)),
-                                          Spacer(),
-                                          TextField(
-                                            onSubmitted: (v) =>
-                                                x.changeIntervalTime(),
-                                            controller: x.intervalCounter,
-                                            cursorColor: Colors.white,
-                                            textAlign: TextAlign.center,
-                                            maxLength: 5,
-                                            keyboardType: TextInputType.number,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 45),
-                                            decoration: InputDecoration(
-                                              counterText: '',
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                ),
+                                onTap: () => x.timeLapsBtnValue.value
+                                    ? Get.dialog(Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: Get.width * 0.15,
+                                            vertical: Get.height * 0.37),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: Container(
+                                            padding: EdgeInsets.all(20),
+                                            decoration: BoxDecoration(
+                                                color: Colors.red.shade900,
                                                 borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              fillColor: Colors.white,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white54,
+                                                    BorderRadius.circular(15)),
+                                            child: Column(
+                                              children: [
+                                                Text("Select Interval Time",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 18)),
+                                                Spacer(),
+                                                TextField(
+                                                  onSubmitted: (v) =>
+                                                      x.changeIntervalTime(),
+                                                  controller: x.intervalCounter,
+                                                  cursorColor: Colors.white,
+                                                  textAlign: TextAlign.center,
+                                                  maxLength: 5,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 45),
+                                                  decoration: InputDecoration(
+                                                    counterText: '',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    fillColor: Colors.white,
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white54,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                    border: OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: Colors.white,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.0),
+                                                    ),
+                                                  ),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: Colors.white,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
-                                              ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                )) : null,
+                                        ),
+                                      ))
+                                    : null,
                                 child: Text(x.intervalTime(),
                                     style: TextStyle(
                                         color: x.timeLapsBtnValue.value
@@ -266,7 +302,7 @@ class Dashboard extends StatelessWidget {
                                             : Colors.grey,
                                         fontSize: 40)),
                               ),
-                               Text("00:00",
+                              Text("00:00",
                                   style: TextStyle(
                                       color: x.timeLapsBtnValue.value
                                           ? Colors.yellow
@@ -360,12 +396,15 @@ class Dashboard extends StatelessWidget {
                             ),
                           ),
                           child: Slider(
-                              min: 0,
-                              max: 14,
-                              divisions: 10,
-                              label: '${x.sliderSpeed().round()}',
-                              value: x.sliderSpeed(),
-                              onChanged: (value) => x.changeSliderSpeed(value)),
+                            onChanged: (v) {},
+                            min: 0,
+                            max: 14,
+                            divisions: 10,
+                            label: '${x.sliderSpeed().round()}',
+                            value: x.sliderSpeed(),
+                            onChangeEnd: (value) => x.changeSliderSpeed(value),
+                            // onChanged: (value) => x.changeSliderSpeed(value)
+                          ),
                         ),
                       ],
                     ),
