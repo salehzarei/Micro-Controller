@@ -31,6 +31,7 @@ class SliderController extends GetxController {
   final stopMotionBtnValue = false.obs;
   final shoterCount = '0000'.obs;
   final intervalTime = '00:00'.obs;
+  final selectedIntevalTime = '00:00'.obs;
   final startBtnStatus = false.obs;
   final batteryLevel = 70.obs;
 
@@ -233,12 +234,50 @@ class SliderController extends GetxController {
   }
 
   changeIntervalTime() {
-    _socket.add(utf8.encode('*${intervalCounter.text}'));
+    String min, sec;
+    if (int.parse(intervalCounter.text.split(":")[0]) > 60)
+      min = '60';
+    else
+      min = intervalCounter.text.split(":")[0];
+    if (int.parse(intervalCounter.text.split(":")[1]) > 60)
+      sec = '60';
+    else
+      sec = intervalCounter.text.split(":")[1];
+
+    _socket.add(utf8.encode('*$min":"$sec'));
+    selectedIntevalTime("$min:$sec");
+    update();
     Get.back();
   }
 
   void startStop() {
-    _socket.add(utf8.encode('start'));
+    if (timeLapsBtnValue.value && startBtnStatus.value) {
+      Get.dialog(
+        SimpleDialog(
+          backgroundColor: Colors.white.withOpacity(0.9),
+          titlePadding: EdgeInsets.all(8),
+          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+          title: Text("Are you sure you want to Stop TimeLapse Mode ?"),
+          children: [
+            RaisedButton(
+                child: Text("Yes", style: TextStyle(color: Colors.white)),
+                color: Colors.blue,
+                onPressed: () {
+                  _socket.add(utf8.encode('start'));
+                  Get.back();
+                }),
+            RaisedButton(
+                child: Text(
+                  "No",
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.redAccent,
+                onPressed: () => Get.back())
+          ],
+        ),
+      );
+    } else
+      _socket.add(utf8.encode('start'));
   }
 
   void changeMovieBtnValue(bool value) {

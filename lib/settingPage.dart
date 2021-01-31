@@ -15,15 +15,47 @@ class SettingPage extends StatelessWidget {
                 title: Text("Setting"),
                 backgroundColor: Colors.blueAccent.shade200,
               ),
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: Colors.red,
-                onPressed: () => x
-                    .disconnectFromServer()
-                    .whenComplete(() => SystemNavigator.pop()),
-                child: Icon(
-                  Icons.power_settings_new,
-                  color: Colors.white,
-                ),
+              floatingActionButton: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "Sleep Wireless",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  FloatingActionButton(
+                    backgroundColor: Colors.red,
+                    onPressed: () => Get.dialog(SimpleDialog(
+                      backgroundColor: Colors.white.withOpacity(0.9),
+                      titlePadding: EdgeInsets.all(8),
+                      contentPadding: EdgeInsets.symmetric(horizontal: 8),
+                      title: Text(
+                          "Are you sure you want to sleep slider wireless ?"),
+                      children: [
+                        RaisedButton(
+                            child: Text("Yes",
+                                style: TextStyle(color: Colors.white)),
+                            color: Colors.blue,
+                            onPressed: () => x
+                                .disconnectFromServer()
+                                .whenComplete(() => SystemNavigator.pop())),
+                        RaisedButton(
+                            child: Text(
+                              "No",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: Colors.redAccent,
+                            onPressed: () => Get.back())
+                      ],
+                    )),
+                    child: Icon(
+                      Icons.power_settings_new,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
               body: Center(
                   child: Container(

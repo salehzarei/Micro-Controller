@@ -302,7 +302,7 @@ class Dashboard extends StatelessWidget {
                                             : Colors.grey,
                                         fontSize: 40)),
                               ),
-                              Text(x.intervalCounter.text,
+                              Text(x.selectedIntevalTime.value,
                                   style: TextStyle(
                                       color: x.timeLapsBtnValue.value
                                           ? Colors.yellow
