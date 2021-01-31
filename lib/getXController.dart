@@ -12,8 +12,8 @@ import 'settingPage.dart';
 
 class SliderController extends GetxController {
   final settings = <String>[].obs;
-  final deviceIp = '192.168.1.39'.obs;
-  final deviceport = 54777.obs;
+  final deviceIp = '192.168.4.1'.obs;
+  final deviceport = 1010.obs;
   final movieCommand = 'mode1'.obs;
   final timeLapseCommand = 'mode2'.obs;
   final stopMotionCommand = 'mode3'.obs;
@@ -45,9 +45,8 @@ class SliderController extends GetxController {
 
   @override
   void onInit() {
-    connectToDevice();
-    // connect();
-    loadSettingData();
+    loadSettingData().whenComplete(() => connectToDevice());
+
     super.onInit();
     print("Run onInit");
   }
@@ -193,7 +192,7 @@ class SliderController extends GetxController {
     _socket.add(utf8.encode('shot'));
   }
 
-  void loadSettingData() async {
+  Future loadSettingData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final myStringList = prefs.getStringList('setting') ?? [];
 
@@ -221,11 +220,15 @@ class SliderController extends GetxController {
     await prefs.setStringList('setting', settings());
   }
 
-  Future changeSliderSpeed(speed) async {
+  changeSliderSpeed(speed) {
     print("Sended Speed :" + sliderSpeed.value.round().toString());
-    _socket.add(utf8.encode('\$${sliderSpeed.value.round()}'));
+
     sliderSpeed(speed);
     update();
+  }
+
+  sendSliderSpeed(speed) {
+    _socket.add(utf8.encode('\$${sliderSpeed.value.round()}'));
   }
 
   changeShoterCounter() {
@@ -235,12 +238,12 @@ class SliderController extends GetxController {
 
   changeIntervalTime() {
     String min, sec;
-    if (int.parse(intervalCounter.text.split(":")[0]) > 60)
-      min = '60';
+    if (int.parse(intervalCounter.text.split(":")[0]) > 59)
+      min = '59';
     else
       min = intervalCounter.text.split(":")[0];
-    if (int.parse(intervalCounter.text.split(":")[1]) > 60)
-      sec = '60';
+    if (int.parse(intervalCounter.text.split(":")[1]) > 59)
+      sec = '59';
     else
       sec = intervalCounter.text.split(":")[1];
 
@@ -251,7 +254,11 @@ class SliderController extends GetxController {
   }
 
   void startStop() {
-    if (timeLapsBtnValue.value && startBtnStatus.value) {
+    _socket.add(utf8.encode('start'));
+  }
+
+  void changeMovieBtnValue(bool value) {
+    if (timeLapsBtnValue.value) {
       Get.dialog(
         SimpleDialog(
           backgroundColor: Colors.white.withOpacity(0.9),
@@ -263,7 +270,7 @@ class SliderController extends GetxController {
                 child: Text("Yes", style: TextStyle(color: Colors.white)),
                 color: Colors.blue,
                 onPressed: () {
-                  _socket.add(utf8.encode('start'));
+                  _socket.add(utf8.encode('MODE1'));
                   Get.back();
                 }),
             RaisedButton(
@@ -276,12 +283,7 @@ class SliderController extends GetxController {
           ],
         ),
       );
-    } else
-      _socket.add(utf8.encode('start'));
-  }
-
-  void changeMovieBtnValue(bool value) {
-    _socket.add(utf8.encode('MODE1'));
+    }
   }
 
   void changeTimeLapsValue(bool value) {
@@ -289,6 +291,31 @@ class SliderController extends GetxController {
   }
 
   void changeStopMotionValue(bool value) {
-    _socket.add(utf8.encode('MODE3'));
+    if (timeLapsBtnValue.value) {
+      Get.dialog(
+        SimpleDialog(
+          backgroundColor: Colors.white.withOpacity(0.9),
+          titlePadding: EdgeInsets.all(8),
+          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+          title: Text("Are you sure you want to Stop TimeLapse Mode ?"),
+          children: [
+            RaisedButton(
+                child: Text("Yes", style: TextStyle(color: Colors.white)),
+                color: Colors.blue,
+                onPressed: () {
+                  _socket.add(utf8.encode('MODE3'));
+                  Get.back();
+                }),
+            RaisedButton(
+                child: Text(
+                  "No",
+                  style: TextStyle(color: Colors.white),
+                ),
+                color: Colors.redAccent,
+                onPressed: () => Get.back())
+          ],
+        ),
+      );
+    }
   }
 }

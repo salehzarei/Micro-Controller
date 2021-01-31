@@ -83,9 +83,11 @@ class SettingPage extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 2,
-                              child: Text('Device IP',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: FittedBox(
+                                child: Text('Slider IP ',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                             Expanded(
                               flex: 3,
@@ -125,9 +127,11 @@ class SettingPage extends StatelessWidget {
                             ),
                             Expanded(
                               flex: 1,
-                              child: Text('Port',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: FittedBox(
+                                child: Text('Port ',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                             Expanded(
                               flex: 2,
@@ -173,9 +177,11 @@ class SettingPage extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 3,
-                              child: Text('Movie Command',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: FittedBox(
+                                child: Text('Movie Command ',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                             Expanded(
                               flex: 3,
@@ -218,9 +224,11 @@ class SettingPage extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 3,
-                              child: Text('Time Lapse Command',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: FittedBox(
+                                child: Text('Time Lapse Command ',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                             Expanded(
                               flex: 3,
@@ -263,9 +271,11 @@ class SettingPage extends StatelessWidget {
                           children: [
                             Expanded(
                               flex: 3,
-                              child: Text('Stop Motion Command',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 18)),
+                              child: FittedBox(
+                                child: Text('Stop Motion Command ',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18)),
+                              ),
                             ),
                             Expanded(
                               flex: 3,
@@ -298,9 +308,6 @@ class SettingPage extends StatelessWidget {
                             )
                           ],
                         )),
-                    Divider(
-                      color: Colors.white,
-                    ),
                     Divider(
                       color: Colors.white,
                     ),

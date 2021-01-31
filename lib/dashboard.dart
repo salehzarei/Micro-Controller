@@ -123,52 +123,60 @@ class Dashboard extends StatelessWidget {
                                                     BorderRadius.circular(15)),
                                             child: Column(
                                               children: [
-                                                Text(
-                                                    "Select the number of shots",
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text("Shots Count",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16)),
+                                                ),
+                                                Spacer(
+                                                  flex: 1,
+                                                ),
+                                                Expanded(
+                                                  flex: 4,
+                                                  child: TextField(
+                                                    onSubmitted: (v) =>
+                                                        x.changeShoterCounter(),
+                                                    controller: x.shoterCounter,
+                                                    cursorColor: Colors.white,
+                                                    textAlign: TextAlign.center,
+                                                    maxLength: 4,
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 16)),
-                                                Spacer(),
-                                                TextField(
-                                                  onSubmitted: (v) =>
-                                                      x.changeShoterCounter(),
-                                                  controller: x.shoterCounter,
-                                                  cursorColor: Colors.white,
-                                                  textAlign: TextAlign.center,
-                                                  maxLength: 4,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 40),
-                                                  decoration: InputDecoration(
-                                                    counterText: '',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white,
+                                                        fontSize: 30),
+                                                    decoration: InputDecoration(
+                                                      counterText: '',
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    fillColor: Colors.white,
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white54,
+                                                      fillColor: Colors.white,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white54,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
                                                     ),
                                                   ),
                                                 ),
@@ -241,51 +249,61 @@ class Dashboard extends StatelessWidget {
                                                     BorderRadius.circular(15)),
                                             child: Column(
                                               children: [
-                                                Text("Select Interval Time",
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: Text("Interval Time",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16)),
+                                                ),
+                                                Spacer(
+                                                  flex: 1,
+                                                ),
+                                                Expanded(
+                                                  flex: 4,
+                                                  child: TextField(
+                                                    onSubmitted: (v) =>
+                                                        x.changeIntervalTime(),
+                                                    controller:
+                                                        x.intervalCounter,
+                                                    cursorColor: Colors.white,
+                                                    textAlign: TextAlign.center,
+                                                    maxLength: 5,
+                                                    keyboardType:
+                                                        TextInputType.number,
                                                     style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 16)),
-                                                Spacer(),
-                                                TextField(
-                                                  onSubmitted: (v) =>
-                                                      x.changeIntervalTime(),
-                                                  controller: x.intervalCounter,
-                                                  cursorColor: Colors.white,
-                                                  textAlign: TextAlign.center,
-                                                  maxLength: 5,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 40),
-                                                  decoration: InputDecoration(
-                                                    counterText: '',
-                                                    focusedBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white,
+                                                        fontSize: 30),
+                                                    decoration: InputDecoration(
+                                                      counterText: '',
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    fillColor: Colors.white,
-                                                    enabledBorder:
-                                                        OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white54,
+                                                      fillColor: Colors.white,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white54,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
-                                                    ),
-                                                    border: OutlineInputBorder(
-                                                      borderSide: BorderSide(
-                                                        color: Colors.white,
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                          color: Colors.white,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10.0),
                                                       ),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10.0),
                                                     ),
                                                   ),
                                                 ),
@@ -400,15 +418,15 @@ class Dashboard extends StatelessWidget {
                             ),
                           ),
                           child: Slider(
-                            onChanged: (v) {},
-                            min: 0,
-                            max: 14,
-                            divisions: 10,
-                            label: '${x.sliderSpeed().round()}',
-                            value: x.sliderSpeed(),
-                            onChangeEnd: (value) => x.changeSliderSpeed(value),
-                            // onChanged: (value) => x.changeSliderSpeed(value)
-                          ),
+                              //  onChanged: (v) {},
+                              min: 0,
+                              max: 14,
+                              label: '${x.sliderSpeed().round()}',
+                              value: x.sliderSpeed(),
+                              // onChangeStart: (value) =>
+                              //     x.changeSliderSpeed(value),
+                              onChangeEnd: (value) => x.sendSliderSpeed(value),
+                              onChanged: (value) => x.changeSliderSpeed(value)),
                         ),
                       ],
                     ),
