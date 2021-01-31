@@ -127,7 +127,7 @@ class Dashboard extends StatelessWidget {
                                                     "Select the number of shots",
                                                     style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 18)),
+                                                        fontSize: 16)),
                                                 Spacer(),
                                                 TextField(
                                                   onSubmitted: (v) =>
@@ -140,7 +140,7 @@ class Dashboard extends StatelessWidget {
                                                       TextInputType.number,
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 45),
+                                                      fontSize: 40),
                                                   decoration: InputDecoration(
                                                     counterText: '',
                                                     focusedBorder:
@@ -178,7 +178,7 @@ class Dashboard extends StatelessWidget {
                                         ),
                                       ))
                                     : null,
-                                child: Text(x.shoterCounter.text,
+                                child: Text(x.shoterCount(),
                                     style: TextStyle(
                                         color: x.movieBtnValue.value
                                             ? Colors.grey
@@ -244,7 +244,7 @@ class Dashboard extends StatelessWidget {
                                                 Text("Select Interval Time",
                                                     style: TextStyle(
                                                         color: Colors.white,
-                                                        fontSize: 18)),
+                                                        fontSize: 16)),
                                                 Spacer(),
                                                 TextField(
                                                   onSubmitted: (v) =>
@@ -257,7 +257,7 @@ class Dashboard extends StatelessWidget {
                                                       TextInputType.number,
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 45),
+                                                      fontSize: 40),
                                                   decoration: InputDecoration(
                                                     counterText: '',
                                                     focusedBorder:
@@ -302,7 +302,7 @@ class Dashboard extends StatelessWidget {
                                             : Colors.grey,
                                         fontSize: 40)),
                               ),
-                              Text("00:00",
+                              Text(x.intervalCounter.text,
                                   style: TextStyle(
                                       color: x.timeLapsBtnValue.value
                                           ? Colors.yellow
@@ -324,9 +324,11 @@ class Dashboard extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.chevron_left,
-                            color: x.sliderDirection()
+                            color: x.sliderDirection() == 'l'
                                 ? Colors.white
-                                : Colors.white.withOpacity(0.2),
+                                : x.sliderDirection() == 'r'
+                                    ? Colors.white.withOpacity(0.2)
+                                    : Colors.white.withOpacity(0.2),
                             size: 60,
                           ),
                           RaisedButton(
@@ -340,9 +342,11 @@ class Dashboard extends StatelessWidget {
                           ),
                           Icon(
                             Icons.chevron_right,
-                            color: x.sliderDirection()
-                                ? Colors.white.withOpacity(0.2)
-                                : Colors.white,
+                            color: x.sliderDirection() == 'r'
+                                ? Colors.white
+                                : x.sliderDirection() == 'l'
+                                    ? Colors.white.withOpacity(0.2)
+                                    : Colors.white.withOpacity(0.2),
                             size: 60,
                           ),
                         ],
@@ -412,10 +416,10 @@ class Dashboard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 30.0),
                       child: RaisedButton(
                         textColor: Colors.white,
-                        color: x.projectStatus.value
+                        color: x.startBtnStatus.value
                             ? Colors.red.shade900
                             : Colors.green.shade700,
-                        child: x.projectStatus.value
+                        child: x.startBtnStatus.value
                             ? Text(
                                 "Stop",
                                 style: TextStyle(fontSize: 25),

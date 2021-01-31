@@ -8,6 +8,8 @@ import 'package:omidsystem/dataModel.dart';
 import 'package:omidsystem/settingPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'settingPage.dart';
+
 class SliderController extends GetxController {
   final settings = <String>[].obs;
   final deviceIp = '192.168.1.39'.obs;
@@ -23,13 +25,13 @@ class SliderController extends GetxController {
   final TextEditingController stopm = TextEditingController();
 
   final sliderSpeed = 0.0.obs;
-  final sliderDirection = false.obs;
+  final sliderDirection = 'off'.obs;
   final movieBtnValue = true.obs;
   final timeLapsBtnValue = false.obs;
   final stopMotionBtnValue = false.obs;
   final shoterCount = '0000'.obs;
   final intervalTime = '00:00'.obs;
-  final projectStatus = false.obs;
+  final startBtnStatus = false.obs;
   final batteryLevel = 70.obs;
 
   final TextEditingController shoterCounter = TextEditingController();
@@ -46,6 +48,7 @@ class SliderController extends GetxController {
     // connect();
     loadSettingData();
     super.onInit();
+    print("Run onInit");
   }
 
   // void connect() async {
@@ -74,31 +77,35 @@ class SliderController extends GetxController {
   // }
 
   void connectToDevice() async {
-    Socket.connect(deviceIp.value, deviceport.value).then((soket) {
+    Socket.connect(deviceIp.value, deviceport.value,
+            timeout: Duration(milliseconds: 1000))
+        .then((soket) {
       _socket = soket;
       Get.snackbar("Connected",
-          "Device Connected to ${deviceIp.value}:${deviceport.value.toString()}");
+          "Device Connected to ${deviceIp.value}:${deviceport.value.toString()}",
+          colorText: Colors.white,
+          duration: Duration(milliseconds: 3000),
+          snackPosition: SnackPosition.BOTTOM);
 
       _socket.listen(
         (onData) {
-          //  print("Recives : " + String.fromCharCodes(onData).trim());
-          // items.insert(
-          //   0,
-          // MessageItem(_socket.remoteAddress.address,
-          //     String.fromCharCodes(onData).trim())
-          // String.fromCharCodes(onData).trim());
           reciveData(String.fromCharCodes(onData).trim());
           deviceData(DataModel.fromJson(json.decode(reciveData.value)));
-          //  );
-
+          updateAllValue();
           update();
         },
-        //  onDone: () => onDone,
-//onError: () => onError,
       );
     }).catchError((e) {
-      Get.snackbar('Connection Faild', e.toString());
-      Get.to(SettingPage());
+      Get.snackbar('Connection Faild', e.toString(),
+          colorText: Colors.white,
+          duration: Duration(milliseconds: 3000),
+          icon: Icon(
+            Icons.warning_amber_rounded,
+            color: Colors.white,
+          ),
+          snackPosition: SnackPosition.BOTTOM);
+      Future.delayed(Duration(milliseconds: 4000))
+          .whenComplete(() => Get.to(SettingPage()));
     });
 
 //     try {
@@ -111,28 +118,74 @@ class SliderController extends GetxController {
 //       // reciveData(utf8.decode(event));
   }
 
-  void disconnectFromServer() {
+  Future disconnectFromServer() async {
     print("disconnectFromServer");
-
+    _socket.add(utf8.encode('slp'));
     _socket.close();
 
     _socket = null;
+  }
+
+  void updateAllValue() {
+    ///// Slider Speed ////
+    sliderSpeed(double.parse(deviceData.value.slid));
+
+    ///// Direction Arrow /////
+    switch (deviceData.value.dir) {
+      case "2":
+        sliderDirection('l');
+        break;
+      case "1":
+        sliderDirection('r');
+        break;
+      case "0":
+        sliderDirection('off');
+        break;
+    }
+    ///// Mode Button Status ////
+    switch (deviceData.value.mode) {
+      case "1":
+        movieBtnValue(true);
+        timeLapsBtnValue(false);
+        stopMotionBtnValue(false);
+        break;
+      case "2":
+        movieBtnValue(false);
+        timeLapsBtnValue(true);
+        stopMotionBtnValue(false);
+        break;
+      case "3":
+        movieBtnValue(false);
+        timeLapsBtnValue(false);
+        stopMotionBtnValue(true);
+        break;
+      default:
+    }
+    ///// Shoter Counter /////
+    shoterCount(deviceData.value.shot);
+
+    ///// InterVal Counter /////
+    intervalTime(deviceData.value.m + ":" + deviceData.value.e);
+
+    ///// Start/Stop Button ////
+    switch (deviceData.value.st) {
+      case "0":
+        startBtnStatus(false);
+        break;
+      case "1":
+        startBtnStatus(true);
+        break;
+      default:
+    }
+
+    ///// Battery Status /////
+    batteryLevel(int.parse(deviceData.value.batt) * 20);
     update();
   }
 
   Future sendDirection() async {
-    print("sned Direction Request");
     _socket.add(utf8.encode('direction'));
-    // await Future.delayed(Duration(seconds: 5));
-    print("reciveData is :" + deviceData.value.dir);
-    if (deviceData.value.dir == '2') {
-      sliderDirection(true);
-    } else if (deviceData.value.dir == '1') {
-      sliderDirection(false);
-    } else {
-      print(deviceData.value.dir);
-    }
-    update();
+    print("ReciveDirectionData :" + deviceData.value.dir);
   }
 
   Future sendShoot() async {
@@ -157,12 +210,6 @@ class SliderController extends GetxController {
     timel.text = timeLapseCommand.value;
     stopm.text = stopMotionCommand.value;
 
-    if (deviceData.value.st == '1') {
-      projectStatus(false);
-    } else
-      projectStatus(true);
-    print("Updated");
-    // sliderSpeed(double.parse(deviceData.value.slid));
     update();
   }
 
@@ -181,58 +228,28 @@ class SliderController extends GetxController {
   }
 
   changeShoterCounter() {
-    shoterCount(shoterCounter.text);
-    update();
+    _socket.add(utf8.encode('#${shoterCounter.text}'));
     Get.back();
   }
 
   changeIntervalTime() {
-    intervalTime(intervalCounter.text);
-    update();
+    _socket.add(utf8.encode('*${intervalCounter.text}'));
     Get.back();
   }
 
-  Future startStop() async {
+  void startStop() {
     _socket.add(utf8.encode('start'));
-    await Future.delayed(Duration(milliseconds: 300));
-    print(deviceData.value.st);
-    if (deviceData.value.st == '1') {
-      projectStatus(false);
-    } else if (deviceData.value.st == '0') {
-      projectStatus(true);
-    } else {
-      print("Noting");
-    }
-    update();
   }
 
-  Future changeMovieBtnValue(bool value) async {
-    movieBtnValue(value);
-    if (value) {
-      timeLapsBtnValue(false);
-      stopMotionBtnValue(false);
-      _socket.add(utf8.encode('MODE1'));
-    }
-    update();
+  void changeMovieBtnValue(bool value) {
+    _socket.add(utf8.encode('MODE1'));
   }
 
   void changeTimeLapsValue(bool value) {
-    timeLapsBtnValue(value);
-    if (value) {
-      movieBtnValue(false);
-      stopMotionBtnValue(false);
-      _socket.add(utf8.encode('MODE2'));
-    }
-    update();
+    _socket.add(utf8.encode('MODE2'));
   }
 
   void changeStopMotionValue(bool value) {
-    stopMotionBtnValue(value);
-    if (value) {
-      timeLapsBtnValue(false);
-      movieBtnValue(false);
-      _socket.add(utf8.encode('MODE3'));
-    }
-    update();
+    _socket.add(utf8.encode('MODE3'));
   }
 }

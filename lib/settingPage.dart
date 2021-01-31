@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:omidsystem/dashboard.dart';
 import 'getXController.dart';
@@ -13,6 +14,16 @@ class SettingPage extends StatelessWidget {
                 centerTitle: true,
                 title: Text("Setting"),
                 backgroundColor: Colors.blueAccent.shade200,
+              ),
+              floatingActionButton: FloatingActionButton(
+                backgroundColor: Colors.red,
+                onPressed: () => x
+                    .disconnectFromServer()
+                    .whenComplete(() => SystemNavigator.pop()),
+                child: Icon(
+                  Icons.power_settings_new,
+                  color: Colors.white,
+                ),
               ),
               body: Center(
                   child: Container(
@@ -268,9 +279,10 @@ class SettingPage extends StatelessWidget {
                         textColor: Colors.white,
                         color: Colors.blue.shade700,
                         child: Text("Save Setting"),
-                        onPressed: () => x
-                            .changeSettingData()
-                            .whenComplete(() => Get.to(Dashboard())),
+                        onPressed: () => x.changeSettingData().whenComplete(() {
+                          x.onInit();
+                          Get.to(Dashboard());
+                        }),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
