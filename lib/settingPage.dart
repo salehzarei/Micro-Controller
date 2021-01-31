@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:omidsystem/dashboard.dart';
 import 'getXController.dart';
 
 class SettingPage extends StatelessWidget {
@@ -269,7 +270,7 @@ class SettingPage extends StatelessWidget {
                         child: Text("Save Setting"),
                         onPressed: () => x
                             .changeSettingData()
-                            .whenComplete(() => Get.back()),
+                            .whenComplete(() => Get.to(Dashboard())),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),

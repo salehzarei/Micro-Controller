@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:get/get.dart';
 import 'package:omidsystem/dataModel.dart';
+import 'package:omidsystem/settingPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SliderController extends GetxController {
   final settings = <String>[].obs;
-  final deviceIp = '192.168.4.1'.obs;
-  final deviceport = 1010.obs;
+  final deviceIp = '192.168.1.39'.obs;
+  final deviceport = 54777.obs;
   final movieCommand = 'mode1'.obs;
   final timeLapseCommand = 'mode2'.obs;
   final stopMotionCommand = 'mode3'.obs;
@@ -42,9 +43,35 @@ class SliderController extends GetxController {
   @override
   void onInit() {
     connectToDevice();
+    // connect();
     loadSettingData();
     super.onInit();
   }
+
+  // void connect() async {
+  //   Socket.connect(deviceIp.value, deviceport.value).then((Socket sock) {
+  //     _socket = sock;
+  //     _socket.listen(dataHandler,
+  //         onDone: doneHandler, onError: errorHandler, cancelOnError: false);
+  //   }).catchError((AsyncError e) {
+  //     print("Unable to connect: $e");
+  //   });
+  //   //Connect standard in to the socket
+  //   stdin.listen(
+  //       (data) => _socket.write(new String.fromCharCodes(data).trim() + '\n'));
+  // }
+
+  // void dataHandler(data) {
+  //   print(new String.fromCharCodes(data).trim());
+  // }
+
+  // void doneHandler() {
+  //   _socket.destroy();
+  // }
+
+  // void errorHandler(error, StackTrace trace) {
+  //   print(error);
+  // }
 
   void connectToDevice() async {
     Socket.connect(deviceIp.value, deviceport.value).then((soket) {
@@ -71,7 +98,7 @@ class SliderController extends GetxController {
       );
     }).catchError((e) {
       Get.snackbar('Connection Faild', e.toString());
-      print(e);
+      Get.to(SettingPage());
     });
 
 //     try {
@@ -91,17 +118,6 @@ class SliderController extends GetxController {
 
     _socket = null;
     update();
-  }
-
-  void onDone() {
-    Get.snackbar("Terminate", "Connection has terminated.");
-    disconnectFromServer();
-  }
-
-  void onError(e) {
-    print("onError: $e");
-    Get.snackbar("Error", e.toString());
-    disconnectFromServer();
   }
 
   Future sendDirection() async {
