@@ -326,6 +326,14 @@ class SettingPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                       ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Text(
+                        'Designed and produced by Omid hasannezhad \n 0 9 1 5 5 1 8 4 3 3 5',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white),
+                      ),
                     )
                   ],
                 ),

@@ -14,9 +14,9 @@ class SliderController extends GetxController {
   final settings = <String>[].obs;
   final deviceIp = '192.168.4.1'.obs;
   final deviceport = 1010.obs;
-  final movieCommand = 'mode1'.obs;
-  final timeLapseCommand = 'mode2'.obs;
-  final stopMotionCommand = 'mode3'.obs;
+  final movieCommand = ''.obs;
+  final timeLapseCommand = ''.obs;
+  final stopMotionCommand = ''.obs;
 
   final TextEditingController ipAddress = TextEditingController();
   final TextEditingController port = TextEditingController();
@@ -258,7 +258,7 @@ class SliderController extends GetxController {
   }
 
   void changeMovieBtnValue(bool value) {
-    if (timeLapsBtnValue.value) {
+    if (timeLapsBtnValue.value & startBtnStatus.value) {
       Get.dialog(
         SimpleDialog(
           backgroundColor: Colors.white.withOpacity(0.9),
@@ -283,7 +283,7 @@ class SliderController extends GetxController {
           ],
         ),
       );
-    }
+    } else if (stopMotionBtnValue.value) _socket.add(utf8.encode('MODE1'));
   }
 
   void changeTimeLapsValue(bool value) {
@@ -291,7 +291,7 @@ class SliderController extends GetxController {
   }
 
   void changeStopMotionValue(bool value) {
-    if (timeLapsBtnValue.value) {
+    if (timeLapsBtnValue.value & startBtnStatus.value) {
       Get.dialog(
         SimpleDialog(
           backgroundColor: Colors.white.withOpacity(0.9),
@@ -316,6 +316,6 @@ class SliderController extends GetxController {
           ],
         ),
       );
-    }
+    } else if (movieBtnValue.value) _socket.add(utf8.encode('MODE3'));
   }
 }
