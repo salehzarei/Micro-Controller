@@ -270,6 +270,7 @@ class SliderController extends GetxController {
                 child: Text("Yes", style: TextStyle(color: Colors.white)),
                 color: Colors.blue,
                 onPressed: () {
+                  _socket.add(utf8.encode('start'));
                   _socket.add(utf8.encode('MODE1'));
                   Get.back();
                 }),
@@ -283,7 +284,8 @@ class SliderController extends GetxController {
           ],
         ),
       );
-    } else if (stopMotionBtnValue.value) _socket.add(utf8.encode('MODE1'));
+    } else
+      _socket.add(utf8.encode('MODE1'));
   }
 
   void changeTimeLapsValue(bool value) {
@@ -303,6 +305,7 @@ class SliderController extends GetxController {
                 child: Text("Yes", style: TextStyle(color: Colors.white)),
                 color: Colors.blue,
                 onPressed: () {
+                  _socket.add(utf8.encode('start'));
                   _socket.add(utf8.encode('MODE3'));
                   Get.back();
                 }),
@@ -316,6 +319,7 @@ class SliderController extends GetxController {
           ],
         ),
       );
-    } else if (movieBtnValue.value) _socket.add(utf8.encode('MODE3'));
+    } else
+      _socket.add(utf8.encode('MODE3'));
   }
 }

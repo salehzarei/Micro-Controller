@@ -363,9 +363,8 @@ class Dashboard extends StatelessWidget {
                       ),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+                            EdgeInsets.symmetric(horizontal: 0, vertical: 15),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Icon(
                               Icons.chevron_left,
@@ -376,6 +375,20 @@ class Dashboard extends StatelessWidget {
                                       : Colors.white.withOpacity(0.2),
                               size: 60,
                             ),
+                            Text(
+                              "L",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: x.sliderDirection() == 'l'
+                                    ? Colors.white
+                                    : x.sliderDirection() == 'r'
+                                        ? Colors.white.withOpacity(0.2)
+                                        : Colors.white.withOpacity(0.2),
+                              ),
+                            ),
+                            Spacer(
+                              flex: 3,
+                            ),
                             RaisedButton(
                               textColor: Colors.white,
                               color: Colors.red.shade900,
@@ -383,6 +396,20 @@ class Dashboard extends StatelessWidget {
                               onPressed: () => x.sendDirection(),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
+                              ),
+                            ),
+                            Spacer(
+                              flex: 3,
+                            ),
+                            Text(
+                              "R",
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: x.sliderDirection() == 'r'
+                                    ? Colors.white
+                                    : x.sliderDirection() == 'l'
+                                        ? Colors.white.withOpacity(0.2)
+                                        : Colors.white.withOpacity(0.2),
                               ),
                             ),
                             Icon(
@@ -410,7 +437,7 @@ class Dashboard extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  "Slider Speed : ",
+                                  "Movement : ",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18.0),
                                 ),
